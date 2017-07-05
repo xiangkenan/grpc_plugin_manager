@@ -40,4 +40,7 @@ test_clinet.o:
 	${CC} ${CFLAG} ${INCLUDE} ${LDFLAGS} -c -o $@ ${SRC}/test_clinet.cc
 
 clean:
+	rm proto/*pb*
 	rm -fr *.o
+	mv server ./bin
+	mv clinet ./bin
