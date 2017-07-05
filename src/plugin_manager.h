@@ -14,8 +14,7 @@ class PluginManager final : public ofo_user_rpc::Service
 		grpc::Status ChooseClassMethod(grpc::ServerContext *context, const request *cc, response *ss);
 		PluginManager():conf_path_(NULL), log_path_(NULL) {}
 
-		bool Init();
-		bool Run(int argc, char *argv[]);
+		bool Init(int argc, char *argv[]);
 
 	private:
 		bool ParseParam(int argc, char *argv[]);

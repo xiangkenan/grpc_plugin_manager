@@ -7,6 +7,7 @@ InstanceLog *InstanceLog::m_instance = NULL;
 //contrcol function
 grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, const request *cc, response *ss)
 {
+	//Run();
 	std::string aa("wolaile");
 	ss->set_result(aa);
 	std::cout << cc->class_name() << std::endl;
@@ -74,7 +75,7 @@ void PluginManager::GlobalInit()
 	InitLog();
 }
 
-bool PluginManager::Run(int argc, char *argv[])
+bool PluginManager::Init(int argc, char *argv[])
 {
 	if(ParseParam(argc, argv) != true)
 	{

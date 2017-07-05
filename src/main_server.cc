@@ -16,8 +16,11 @@ bool RunServer(int argc, char *argv[])
 
 	//插件管理框架
 	PluginManager service;
-	if(service.Run(argc, argv) == false)
-		return -1;
+	if(service.Init(argc, argv) == false)
+	{
+		LOG(ERROR) << "manager init error";
+		return false;
+	}
 
 	builder.RegisterService(&service);
 
