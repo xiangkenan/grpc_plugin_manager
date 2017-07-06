@@ -7,14 +7,16 @@ CC=g++
 
 CFLAG= -std=c++11 -L/usr/local/lib64 -Wl,--no-as-needed -lgrpc++_reflection -Wl,--no-as-needed -lprotobuf -lpthread -ldl
 
-INCLUDE =  -I${PROTO} \
-	 	   -I${LIB}glog/include
+INCLUDE =  	-I${PROTO} \
+	 		-I${LIB}/glog/include \
+		  	-I${LIB}/libxml2/include
 
-LDFLAGS =  -L${LIB}/glog/lib -lglog -Wl,-rpath,./lib/glog/lib
+LDFLAGS =	-L${LIB}/glog/lib -lglog -Wl,-rpath,./lib/glog/lib \
+			-L${LIB}/libxml2/lib
 
 all: pb server clinet clean
 
-server: ofo_main.pb.o ofo_main.grpc.pb.o main_server.o plugin_manager.o
+server: ofo_main.pb.o ofo_main.grpc.pb.o main_server.o core.o plugin_manager.o
 	${CC} $^ -o $@ ${CFLAG} ${INCLUDE} ${LDFLAGS}
 
 pb: ./proto/ofo_main.proto
@@ -29,6 +31,9 @@ ofo_main.pb.o:
 
 ofo_main.grpc.pb.o:
 	${CC} ${CFLAG} -c -o $@ ${PROTO}/ofo_main.grpc.pb.cc
+
+core.o:
+	${CC} ${CFLAG} ${INCLUDE} ${LDFLAGS} -c -o $@ ${SRC}/core.cc
 
 plugin_manager.o:
 	${CC} ${CFLAG} ${INCLUDE} ${LDFLAGS} -c -o $@ ${SRC}/plugin_manager.cc
