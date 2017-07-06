@@ -1,28 +1,21 @@
-#include <iostream>
-#include <grpc++/grpc++.h>
-#include <getopt.h>
-#include <glog/logging.h>
+#ifndef CONF_MANAGER_H
+#define CONF_MANAGER_H
 
-#include "ofo_main.grpc.pb.h"
-#include "log.h"
-#include "conf_manager.h"
+#include<iostream>
 
-using namespace std;
-
-class PluginManager final : public ofo_user_rpc::Service
+class ConfPlugin
 {
 	public:
-		grpc::Status ChooseClassMethod(grpc::ServerContext *context, const request *cc, response *ss);
-		PluginManager():conf_path_(NULL), log_path_(NULL) {}
+		static ConfPlugin* Instance()
+		{
+			return &m_instance;
+		}
 
-		bool Init(int argc, char *argv[]);
+		bool Init(const std::string& work_path, const std::string& conf_file);
 
 	private:
-		bool ParseParam(int argc, char *argv[]);
-		void PrintHelp();
-		void GlobalInit();
-	
-		const char *conf_path_;
-		const char *log_path_;
+
+		static ConfPlugin m_instance;
 };
 
+#endif

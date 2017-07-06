@@ -5,7 +5,7 @@
 #include <grpc++/grpc++.h>
 
 #include "ofo_main.grpc.pb.h"
-#include "plugin_manager.h"
+#include "core.h"
 
 bool RunServer(int argc, char *argv[])
 {
