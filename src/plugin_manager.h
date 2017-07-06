@@ -5,6 +5,7 @@
 
 #include "ofo_main.grpc.pb.h"
 #include "log.h"
+#include "conf_manager.h"
 
 using namespace std;
 
@@ -20,7 +21,6 @@ class PluginManager final : public ofo_user_rpc::Service
 		bool ParseParam(int argc, char *argv[]);
 		void PrintHelp();
 		void GlobalInit();
-		void InitLog();
 	
 		const char *conf_path_;
 		const char *log_path_;

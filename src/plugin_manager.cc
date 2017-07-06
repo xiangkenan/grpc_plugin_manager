@@ -65,14 +65,13 @@ bool PluginManager::ParseParam(int argc, char *argv[])
 	return true;
 }
 
-void PluginManager::InitLog()
-{
-	InstanceLog::GetInstance(log_path_);
-}
-
 void PluginManager::GlobalInit()
 {
-	InitLog();
+	//init log
+	InstanceLog::GetInstance(log_path_);
+
+	//init 
+	ConfPlugin* conf_plugin = ConfPlugin::Instance();
 }
 
 bool PluginManager::Init(int argc, char *argv[])
