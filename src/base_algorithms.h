@@ -2,6 +2,7 @@
 #define BASE_ALGORITHMS_H_
 
 #include "algorithms_muster.h"
+#include "log.h"
 
 class BaseAlgorithms
 {

@@ -172,7 +172,7 @@ void* ConfPlugin::LoadSo(string so_name)
 	const char* dlopen_err = dlerror();
 	if(dlopen_err != NULL)
 	{
-		LOG(WARNING) << "so load error: " << so_name;
+		LOG(WARNING) << "so load:" << so_name << " error: " << dlopen_err;
 	}
 	
 	return handle;
@@ -187,7 +187,7 @@ void* ConfPlugin::GetFactory(string so_name, string algorithms_name)
 		 factory = dlsym(handle, algorithms_name.c_str());
 		 if(NULL == factory)
 		 {
-		 	LOG(ERROR) << "load so: " << so_name << " error:" << dlerror;
+		 	LOG(ERROR) << "load so: " << so_name << " error:" << dlerror();
 		 }
 	}
 

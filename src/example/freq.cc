@@ -13,6 +13,6 @@ bool FreqCtrlServerImp::Init()
 
 bool FreqCtrlServerImp::Run()
 {
-	cout << "插件架构 基本完成" << endl ;
+	LOG(INFO) << "插件架构 基本完成";
 	return true;
 }

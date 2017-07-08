@@ -1,7 +1,8 @@
 #CPPFLAGS = -g -Wall -fPIC -shared -DRELEASE_C
 CPPFLAGS = -g -Wall -fPIC -shared
 
-INCLUDE= -I../
+INCLUDE= -I../ \
+		 -I../../lib/glog/include
 
 all: frequence.so clean
 	mv frequence.so ../../conf/plugins/

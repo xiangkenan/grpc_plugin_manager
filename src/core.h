@@ -1,7 +1,6 @@
 #include <iostream>
 #include <grpc++/grpc++.h>
 #include <getopt.h>
-#include "glog/logging.h"
 
 #include "ofo_main.grpc.pb.h"
 #include "log.h"
