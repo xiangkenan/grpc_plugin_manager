@@ -15,7 +15,13 @@ LDFLAGS =	-L${LIB}/glog/lib -lglog -Wl,-rpath,./lib/glog/lib \
 			-L${LIB}/libxml2/lib -lxml2 -Wl,-rpath,./lib/libxml2/lib \
 			-lpthread
 
-all: pb manager clinet clean
+all: build_dir pb manager clinet clean
+
+build_dir:
+	rm -fr ${DIR}/bin
+	rm -fr ${DIR}/log
+	mkdir ${DIR}/bin
+	mkdir ${DIR}/log
 
 manager: ofo_main.pb.o ofo_main.grpc.pb.o main_server.o core.o plugin_manager.o
 	${CC} $^ -o $@ ${CFLAG} ${INCLUDE} ${LDFLAGS}
