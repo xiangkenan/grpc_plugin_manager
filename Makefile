@@ -12,11 +12,12 @@ INCLUDE =  	-I${PROTO} \
 		  	-I${LIB}/libxml2/include
 
 LDFLAGS =	-L${LIB}/glog/lib -lglog -Wl,-rpath,./lib/glog/lib \
-			-L${LIB}/libxml2/lib
+			-L${LIB}/libxml2/lib -lxml2 -Wl,-rpath,./lib/libxml2/lib \
+			-lpthread
 
-all: pb server clinet clean
+all: pb manager clinet clean
 
-server: ofo_main.pb.o ofo_main.grpc.pb.o main_server.o core.o plugin_manager.o
+manager: ofo_main.pb.o ofo_main.grpc.pb.o main_server.o core.o plugin_manager.o
 	${CC} $^ -o $@ ${CFLAG} ${INCLUDE} ${LDFLAGS}
 
 pb: ./proto/ofo_main.proto
@@ -47,5 +48,5 @@ test_clinet.o:
 clean:
 	rm proto/*pb*
 	rm -fr *.o
-	mv server ./bin
+	mv manager ./bin
 	mv clinet ./bin
