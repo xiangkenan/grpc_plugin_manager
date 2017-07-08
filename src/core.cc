@@ -19,15 +19,17 @@ void PluginManager::PrintHelp()
 	cout << "\33[40;35m Welcome to plugin_manager with grpc!! \33[0m" << endl;
 	cout << "\33[40;35mPlease Usage:\33[0m" << endl;
 	cout << "\33[40;35m-d\33[0m + config_path" << endl;
+	cout << "\33[40;35m-f\33[0m + conf_name" << endl;
 	cout << "\33[40;35m-l\33[0m + log_path" << endl;
 	cout << "\33[40;35m-h\33[0m for help" << endl;
 }
 
 bool PluginManager::ParseParam(int argc, char *argv[])
 {
-	const char *optstring = "d:l:h";
+	const char *optstring = "d:f:l:h";
 	const struct option longopts[] = {
 		{"config_path",1, NULL,'d'},
+		{"conf_name", 1, NULL, 'f'},
 		{"log_path", 1, NULL, 'l'},
 		{"help", 0, NULL, 'h'}
 	};
@@ -39,6 +41,10 @@ bool PluginManager::ParseParam(int argc, char *argv[])
 		{
 			case 'd':
 				conf_path_ = optarg;
+				break;
+
+			case 'f':
+				conf_name_ = optarg;
 				break;
 
 			case 'l':
@@ -71,7 +77,11 @@ void PluginManager::GlobalInit()
 	InstanceLog::GetInstance(log_path_);
 
 	//init 
-	ConfPlugin* conf_plugin = ConfPlugin::Instance();
+	conf_plugin_ = ConfPlugin::Instance();
+	if(NULL == conf_plugin_ || !conf_plugin_->Init(conf_path_, conf_name_))
+	{
+		LOG(ERROR) << "Init plugin conf failed";
+	}
 }
 
 bool PluginManager::Init(int argc, char *argv[])
