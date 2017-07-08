@@ -1,8 +1,14 @@
 #ifndef  ALGORITHMS_MUSTER_H_
 #define  ALGORITHMS_MUSTER_H_
 
-//typedef int * (*CreateStrategy) (int a, int b);
-typedef std::string (*CreateStrategy) ();
+class BaseAlgorithms;
+
+typedef BaseAlgorithms * (*CreateStrategy) ();
+
+#define RegisterProcess(AlgorithmsName) \
+	extern "C" \
+	BaseAlgorithms * create##AlgorithmsName() \
+	{return new (std::nothrow) AlgorithmsName();}
 
 class AlgorithmsMuster
 {

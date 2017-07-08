@@ -6,6 +6,7 @@
 #include "ofo_main.grpc.pb.h"
 #include "log.h"
 #include "plugin_manager.h"
+#include "base_algorithms.h"
 
 using namespace std;
 

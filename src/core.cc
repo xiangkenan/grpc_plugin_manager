@@ -100,7 +100,8 @@ bool PluginManager::Init(int argc, char *argv[])
 	{
 		const vector<AlgorithmsMuster>& algorithms_muster_ = instance[i].algorithms_muster_;
 		CreateStrategy create = algorithms_muster_[i].strategy_handle_;
-		LOG(INFO) << create();
+		BaseAlgorithms *instance = create();
+		LOG(INFO) << "最终测试:" << instance->Run();
 	}
 
 	return true;

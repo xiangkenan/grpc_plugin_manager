@@ -128,7 +128,8 @@ bool ConfPlugin::InitStrategy(const char* work_path, xmlNodePtr child_node, Algo
 	xmlChar *szAttr = xmlGetProp(child_node, BAD_CAST "name");
 	if(szAttr != NULL)
 	{
-		algorithms_info->algorithms_name_ = (char *)szAttr;
+		algorithms_info->algorithms_name_ = "create";
+		algorithms_info->algorithms_name_.append( (char *)szAttr);
 		xmlFree(szAttr);
 	}
 	else
@@ -186,7 +187,7 @@ void* ConfPlugin::GetFactory(string so_name, string algorithms_name)
 		 factory = dlsym(handle, algorithms_name.c_str());
 		 if(NULL == factory)
 		 {
-		 	LOG(ERROR) << "load so: " << so_name << " error";
+		 	LOG(ERROR) << "load so: " << so_name << " error:" << dlerror;
 		 }
 	}
 
