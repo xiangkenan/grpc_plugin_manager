@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class PluginManager final : public ofo_user_rpc::Service
+class PluginManager final : public plugins_rpc::Service
 {
 	public:
 		grpc::Status ChooseClassMethod(grpc::ServerContext *context, const request *cc, response *ss);

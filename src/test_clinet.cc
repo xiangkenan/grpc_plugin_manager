@@ -12,7 +12,7 @@ using grpc::Channel;
 class test_client
 {
 	public:
-		test_client(std::shared_ptr<Channel> channel) : stub_kenan(ofo_user_rpc::NewStub(channel)) {}
+		test_client(std::shared_ptr<Channel> channel) : stub_kenan(plugins_rpc::NewStub(channel)) {}
 
 		std::string oo()
 		{
@@ -26,7 +26,7 @@ class test_client
 			return qq.result();
 		}	
 	private:
-		std::unique_ptr<ofo_user_rpc::Stub> stub_kenan;
+		std::unique_ptr<plugins_rpc::Stub> stub_kenan;
 };
 
 
