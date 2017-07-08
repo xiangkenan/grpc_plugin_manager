@@ -24,7 +24,7 @@ class InstanceLog
 			FLAGS_logtostderr = false;
 			FLAGS_log_dir=log_path;
 			FLAGS_max_log_size = 2000;
-			FLAGS_logbufsecs = 2000;
+			FLAGS_logbufsecs = 0;
 		}
 
 		static pthread_mutex_t m_mutex;

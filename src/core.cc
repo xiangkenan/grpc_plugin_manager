@@ -73,12 +73,13 @@ bool PluginManager::ParseParam(int argc, char *argv[])
 
 void PluginManager::GlobalInit()
 {
+	xmlKeepBlanksDefault(0);
 	//init log
 	InstanceLog::GetInstance(log_path_);
 
 	//init 
-	conf_plugin_ = ConfPlugin::Instance();
-	if(NULL == conf_plugin_ || !conf_plugin_->Init(conf_path_, conf_name_))
+	ConfPlugin* conf_plugin = ConfPlugin::Instance();
+	if(NULL == conf_plugin || !conf_plugin->Init(conf_path_, conf_name_))
 	{
 		LOG(ERROR) << "Init plugin conf failed";
 	}
@@ -92,6 +93,15 @@ bool PluginManager::Init(int argc, char *argv[])
 	}
 
 	GlobalInit();
+
+	const ConfPlugin& instance = *(ConfPlugin::Instance());
+
+	for(int i=0; i<instance.Size(); i++)
+	{
+		const vector<AlgorithmsMuster>& algorithms_muster_ = instance[i].algorithms_muster_;
+		CreateStrategy create = algorithms_muster_[i].strategy_handle_;
+		LOG(INFO) << create();
+	}
 
 	return true;
 }

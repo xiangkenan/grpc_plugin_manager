@@ -25,6 +25,4 @@ class PluginManager final : public ofo_user_rpc::Service
 		const char *conf_path_;
 		const char *log_path_;
 		const char *conf_name_;
-
-		ConfPlugin *conf_plugin_;
 };

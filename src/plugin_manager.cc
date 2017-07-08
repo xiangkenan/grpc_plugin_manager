@@ -65,9 +65,11 @@ bool ConfPlugin::Init(const char* work_path, const char* conf_file)
 
 	for(curNode = curNode->xmlChildrenNode; curNode != NULL; curNode = curNode->next)
 	{
+		Strategies strategies;
+
 		if(xmlStrcmp(curNode->name, BAD_CAST "strategies") != 0)
 		{
-			LOG(WARNING) << "it is not curNode->name";
+			LOG(WARNING) << "it is not strategies";
 			continue;
 		}
 
@@ -75,8 +77,42 @@ bool ConfPlugin::Init(const char* work_path, const char* conf_file)
 		{
 			continue;
 		}
+
+		xmlChar * szAttr = xmlGetProp(curNode, BAD_CAST "name");
+		if(NULL != szAttr)
+		{
+			strategies.name_ = (char *)szAttr;
+			xmlFree(szAttr);
+		}
+
+		xmlNodePtr child_node;
+		for(child_node = curNode->xmlChildrenNode; child_node != NULL; child_node = child_node->next)
+		{
+			if(xmlStrcmp(child_node->name, BAD_CAST "strategy") != 0)
+			{
+				LOG(WARNING) << "it is not strategy";
+				continue;
+			}
+
+			if(xml_kv_cmp(child_node, "switch", "off"))
+			{
+				LOG(INFO) << (char *)xmlGetProp(child_node, BAD_CAST "name") << ": is off";
+				continue;
+			}
+
+			AlgorithmsMuster algorithms_info;
+			if(!InitStrategy(work_path, child_node, &algorithms_info))
+			{
+				goto failed;
+			}
+
+			strategies.algorithms_muster_.push_back(algorithms_info);
+		}
+
+		strategies_.push_back(strategies);
 	}
 
+	status_ = true;
 
 failed:
 	if(NULL != doc)
@@ -85,4 +121,74 @@ failed:
 	}
 
 	return status_;
+}
+
+bool ConfPlugin::InitStrategy(const char* work_path, xmlNodePtr child_node, AlgorithmsMuster *algorithms_info)
+{
+	xmlChar *szAttr = xmlGetProp(child_node, BAD_CAST "name");
+	if(szAttr != NULL)
+	{
+		algorithms_info->algorithms_name_ = (char *)szAttr;
+		xmlFree(szAttr);
+	}
+	else
+	{
+		return false;
+	}
+
+	szAttr = xmlGetProp(child_node, BAD_CAST "so");
+	if(szAttr != NULL)
+	{
+		algorithms_info->so_name_ = work_path;
+		algorithms_info->so_name_ += (char *)szAttr;
+		xmlFree(szAttr);
+	}
+	else
+	{
+		return false;
+	}
+
+	algorithms_info->strategy_handle_ = (CreateStrategy)
+		GetFactory(algorithms_info->so_name_, algorithms_info->algorithms_name_);
+
+	if(algorithms_info->strategy_handle_ == NULL)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void* ConfPlugin::LoadSo(string so_name)
+{
+	if(so_name == "")
+	{
+		return NULL;
+	}
+	
+	void* handle;
+	handle = dlopen(so_name.c_str(), RTLD_LAZY);
+	const char* dlopen_err = dlerror();
+	if(dlopen_err != NULL)
+	{
+		LOG(WARNING) << "so load error: " << so_name;
+	}
+	
+	return handle;
+}
+
+void* ConfPlugin::GetFactory(string so_name, string algorithms_name)
+{
+	void* handle = LoadSo(so_name);;
+	void* factory = NULL;
+	if(handle != NULL)
+	{
+		 factory = dlsym(handle, algorithms_name.c_str());
+		 if(NULL == factory)
+		 {
+		 	LOG(ERROR) << "load so: " << so_name << " error";
+		 }
+	}
+
+	return factory;
 }
