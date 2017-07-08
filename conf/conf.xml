@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<plugins_manager>
+	<strategies name="frequence" switch="on">
+		<strategy name="FreqCtrlServerImp" so="plugins/frequence.so" config="" switch="on"/>
+	</strategies>
+</plugins_manager>
