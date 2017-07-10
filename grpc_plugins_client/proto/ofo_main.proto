@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+service plugins_rpc
+{
+	rpc ChooseClassMethod(Request) returns (Response){}
+}
+
+/*
+	1:class_name 类名字
+	2:parameter 参数
+*/
+message Request
+{
+	map<string, string> params = 1;
+}
+
+/*
+	1:result 返回结果
+*/
+
+message Response
+{
+	string result = 1;
+}
