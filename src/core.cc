@@ -5,12 +5,15 @@ pthread_mutex_t InstanceLog::m_mutex = pp;
 InstanceLog *InstanceLog::m_instance = NULL;
 
 //contrcol function
-grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, const request *cc, response *ss)
+grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, const Request *cc, Response *ss)
 {
 	//Run();
 	std::string aa("wolaile");
 	ss->set_result(aa);
-	std::cout << cc->class_name() << std::endl;
+	//std::cout << cc->class_name() << std::endl;
+	auto map = cc->params();
+	std::cout << map["bid"] << std::endl;
+	std::cout << map["kv1"] << std::endl;
 	return grpc::Status::OK;
 }
 

@@ -15,7 +15,7 @@ LDFLAGS =	-L${LIB}/glog/lib -lglog -Wl,-rpath,./lib/glog/lib \
 			-L${LIB}/libxml2/lib -lxml2 -Wl,-rpath,./lib/libxml2/lib \
 			-lpthread
 
-all: build_dir pb manager clinet clean
+all: build_dir pb manager clean
 
 build_dir:
 	rm -fr ${DIR}/bin
@@ -30,7 +30,7 @@ pb: ./proto/ofo_main.proto
 	protoc  -I ./proto/ --cpp_out=${PROTO} $^
 	protoc -I ./proto/ --grpc_out=${PROTO} --plugin=protoc-gen-grpc=/usr/local/bin/grpc_cpp_plugin $^
 
-clinet: ofo_main.pb.o ofo_main.grpc.pb.o test_clinet.o
+clinet: ofo_main.pb.o ofo_main.grpc.pb.o
 	${CC} $^ -o $@ ${CFLAG} ${INCLUDE} ${LDFLAGS}
 
 ofo_main.pb.o:
@@ -48,11 +48,7 @@ plugin_manager.o:
 main_server.o:
 	${CC} ${CFLAG} ${INCLUDE} ${LDFLAGS} -c -o $@ ${SRC}/main_server.cc
 
-test_clinet.o:
-	${CC} ${CFLAG} ${INCLUDE} ${LDFLAGS} -c -o $@ ${SRC}/test_clinet.cc
-
 clean:
 	rm proto/*pb*
 	rm -fr *.o
 	mv manager ./bin
-	mv clinet ./bin

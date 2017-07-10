@@ -12,7 +12,7 @@ using namespace std;
 class PluginManager final : public plugins_rpc::Service
 {
 	public:
-		grpc::Status ChooseClassMethod(grpc::ServerContext *context, const request *cc, response *ss);
+		grpc::Status ChooseClassMethod(grpc::ServerContext *context, const Request *cc, Response *ss);
 		PluginManager():conf_path_(NULL), log_path_(NULL) {}
 
 		bool Init(int argc, char *argv[]);

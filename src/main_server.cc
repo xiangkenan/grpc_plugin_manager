@@ -9,7 +9,7 @@
 
 bool RunServer(int argc, char *argv[])
 {
-	std::string server_address("0.0.0.0:99999");
+	std::string server_address("0.0.0.0:9502");
 
 	grpc::ServerBuilder builder;
 	builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
