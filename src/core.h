@@ -28,6 +28,6 @@ class PluginManager final : public plugins_rpc::Service
 		const char *conf_name_;
 
 		//实例集合
-		std::unordered_map<string, BaseAlgorithms *> instance_muster_;
+		std::unordered_map<string, std::vector<BaseAlgorithms*>> instance_muster_;
 
 };

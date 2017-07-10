@@ -15,7 +15,6 @@ class AlgorithmsMuster
 	public:
 		std::string so_name_;
 		std::string algorithms_name_;
-		std::string so_transfer_;
 		CreateStrategy strategy_handle_;
 };
 

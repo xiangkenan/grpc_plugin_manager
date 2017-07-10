@@ -9,6 +9,7 @@ using google::protobuf::Map;
 //contrcol function
 grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, const Request *cc, Response *ss)
 {
+	string final_result;
 	Map<string, string> params = cc->params();
 	if(params.count("param") <= 0 || instance_muster_.count(params["param"]) <= 0)
 	{
@@ -16,8 +17,11 @@ grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, cons
 		return grpc::Status::OK;
 	}
 
-	string final_result;
-	instance_muster_[params["param"]]->Run(final_result);
+	vector<BaseAlgorithms*> algorithms_run=instance_muster_[params["param"]];
+	for(int i=0; i<algorithms_run.size(); i++)
+	{
+		algorithms_run[i]->Run(final_result);
+	}
 	ss->set_result(final_result);
 
 	return grpc::Status::OK;
@@ -103,7 +107,7 @@ bool PluginManager::WorkEngine(const Strategies& strategies)
 		{
 			CreateStrategy create = algorithms_muster[i].strategy_handle_;
 			BaseAlgorithms *instance = create();
-			instance_muster_[algorithms_muster[i].so_transfer_] = instance;
+			instance_muster_[strategies.name_].push_back(instance);
 			assert(instance != NULL);
 			if(!instance->Init())
 			{
