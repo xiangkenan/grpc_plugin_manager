@@ -4,6 +4,8 @@
 #include "algorithms_muster.h"
 #include "log.h"
 
+using std::string;
+
 class BaseAlgorithms
 {
 	public:
@@ -11,7 +13,7 @@ class BaseAlgorithms
 		virtual ~BaseAlgorithms() {}
 
 		virtual bool Init() = 0;
-		virtual bool Run() = 0;
+		virtual bool Run(string& final_result) = 0;
 };
 
 #endif

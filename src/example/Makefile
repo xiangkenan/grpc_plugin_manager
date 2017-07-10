@@ -4,10 +4,10 @@ CPPFLAGS = -g -Wall -fPIC -shared
 INCLUDE= -I../ \
 		 -I../../lib/glog/include
 
-all: frequence.so clean
-	mv frequence.so ../../conf/plugins/
+all: freq.so clean
+	mv freq.so ../../conf/plugins/
 
-frequence.so: freq.o
+freq.so: freq.o
 	g++ $(CPPFLAGS) $(INCLUDE) -o $@ $^
 
 freq.o: freq.cc

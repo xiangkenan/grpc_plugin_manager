@@ -5,7 +5,7 @@
 
 #include "glog/logging.h"
 
-using namespace std;
+using std::string;
 
 class InstanceLog
 {

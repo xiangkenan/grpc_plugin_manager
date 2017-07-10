@@ -21,8 +21,13 @@ class PluginManager final : public plugins_rpc::Service
 		bool ParseParam(int argc, char *argv[]);
 		void PrintHelp();
 		void GlobalInit();
+		bool WorkEngine(const Strategies& strategies);
 	
 		const char *conf_path_;
 		const char *log_path_;
 		const char *conf_name_;
+
+		//实例集合
+		std::unordered_map<string, BaseAlgorithms *> instance_muster_;
+
 };

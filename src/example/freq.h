@@ -8,5 +8,5 @@ class FreqCtrlServerImp : public BaseAlgorithms
 		FreqCtrlServerImp();
 		~FreqCtrlServerImp();
 		virtual bool Init();
-		virtual bool Run();
+		virtual bool Run(string& tt);
 };

@@ -142,6 +142,10 @@ bool ConfPlugin::InitStrategy(const char* work_path, xmlNodePtr child_node, Algo
 	{
 		algorithms_info->so_name_ = work_path;
 		algorithms_info->so_name_ += (char *)szAttr;
+		string so_transfer = (char *)szAttr;
+		so_transfer = so_transfer.substr(so_transfer.find("/")+1, so_transfer.size() - so_transfer.find("/"));
+		so_transfer = so_transfer.substr(0, so_transfer.find("."));
+		algorithms_info->so_transfer_ = so_transfer;
 		xmlFree(szAttr);
 	}
 	else

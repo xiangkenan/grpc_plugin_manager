@@ -4,16 +4,22 @@ pthread_mutex_t pp;
 pthread_mutex_t InstanceLog::m_mutex = pp;
 InstanceLog *InstanceLog::m_instance = NULL;
 
+using google::protobuf::Map;
+
 //contrcol function
 grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, const Request *cc, Response *ss)
 {
-	//Run();
-	std::string aa("wolaile");
-	ss->set_result(aa);
-	//std::cout << cc->class_name() << std::endl;
-	auto map = cc->params();
-	std::cout << map["bid"] << std::endl;
-	std::cout << map["kv1"] << std::endl;
+	Map<string, string> params = cc->params();
+	if(params.count("param") <= 0 || instance_muster_.count(params["param"]) <= 0)
+	{
+		ss->set_result("{\"code\":-1,\"msg\":\"no param\"}");
+		return grpc::Status::OK;
+	}
+
+	string final_result;
+	instance_muster_[params["param"]]->Run(final_result);
+	ss->set_result(final_result);
+
 	return grpc::Status::OK;
 }
 
@@ -88,6 +94,30 @@ void PluginManager::GlobalInit()
 	}
 }
 
+bool PluginManager::WorkEngine(const Strategies& strategies)
+{
+	std::vector<AlgorithmsMuster> algorithms_muster = strategies.algorithms_muster_;
+	try
+	{
+		for(int i=0; i<algorithms_muster.size(); i++)
+		{
+			CreateStrategy create = algorithms_muster[i].strategy_handle_;
+			BaseAlgorithms *instance = create();
+			instance_muster_[algorithms_muster[i].so_transfer_] = instance;
+			assert(instance != NULL);
+			if(!instance->Init())
+			{
+				throw "init engine failed";
+			}
+		}
+	}
+	catch (...)
+	{
+		LOG(ERROR) << "init engine failed";
+		exit(1);
+	}
+}
+
 bool PluginManager::Init(int argc, char *argv[])
 {
 	if(ParseParam(argc, argv) != true)
@@ -97,14 +127,11 @@ bool PluginManager::Init(int argc, char *argv[])
 
 	GlobalInit();
 
-	const ConfPlugin& instance = *(ConfPlugin::Instance());
+	const ConfPlugin& strategies = *(ConfPlugin::Instance());
 
-	for(int i=0; i<instance.Size(); i++)
+	for(int i=0; i<strategies.Size(); i++)
 	{
-		const vector<AlgorithmsMuster>& algorithms_muster_ = instance[i].algorithms_muster_;
-		CreateStrategy create = algorithms_muster_[i].strategy_handle_;
-		BaseAlgorithms *instance = create();
-		LOG(INFO) << "最终测试:" << instance->Run();
+		WorkEngine(strategies[i]);
 	}
 
 	return true;
