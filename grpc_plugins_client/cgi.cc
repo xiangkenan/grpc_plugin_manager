@@ -17,7 +17,7 @@ void *work(void *i)
     FCGX_Request request;  
     FCGX_InitRequest(&request, 0, 0);  
 
-	plugin_client *aa = new plugin_client(grpc::CreateChannel("localhost:9502", 
+	plugin_client *client = new plugin_client(grpc::CreateChannel("localhost:9502", 
 				grpc::InsecureChannelCredentials()));
 
     while (true) 
@@ -29,7 +29,7 @@ void *work(void *i)
 
         const string& params = FCGX_GetParam("QUERY_STRING", request.envp);
         Response response;
-        aa->ChooseClassMethod(params, &response);
+        client->ChooseClassMethod(params, &response);
 
         FCGX_FPrintF(request.out,
                 "Content-type: text/json\r\n"
