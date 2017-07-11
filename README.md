@@ -2,5 +2,4 @@
 
 安装：
 mkdir log;
-mkdir conf;
 make;
