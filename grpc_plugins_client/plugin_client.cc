@@ -9,6 +9,9 @@
 
 using grpc::Status;
 using grpc::Channel;
+using grpc::ClientContext;
+using grpc::CompletionQueue;
+using grpc::ClientAsyncResponseReader;
 
 using std::string;
 using std::vector;
@@ -22,12 +25,24 @@ class plugin_client
 		std::string ChooseClassMethod(const string& params, Response *response)
 		{
 			Request request;
-
 			parse_params(params, &request);
+			CompletionQueue cq;
+			ClientContext context;
+			Status status;
 
-			grpc::ClientContext context;
-			stub_kenan->ChooseClassMethod(&context, request, response);
-			return response->result();
+			std::unique_ptr<ClientAsyncResponseReader<Response> >rpc(stub_kenan->AsyncChooseClassMethod(&context, request, &cq));
+			rpc->Finish(response, &status, (void*)1);
+			void *got_tag;
+			bool ok=false;
+			cq.Next(&got_tag, &ok);
+			if(got_tag == (void*)1 && ok==true && status.ok())
+			{
+				return response->result();
+			}
+			else
+			{
+				return "{\"code\":-1,\"msg\":\"no param\"}";
+			}
 		}	
 	private:
 		bool parse_params(const string& params, Request* request);

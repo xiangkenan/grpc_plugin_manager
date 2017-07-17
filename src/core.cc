@@ -7,7 +7,7 @@ InstanceLog *InstanceLog::m_instance = NULL;
 using google::protobuf::Map;
 
 //contrcol function
-grpc::Status PluginManager::ChooseClassMethod(grpc::ServerContext *context, const Request *cc, Response *ss)
+grpc::Status PluginManager::ChooseClassMethod(const Request *cc, Response *ss)
 {
 	string final_result;
 	Map<string, string> params = cc->params();
